@@ -2,8 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../widgets/tasks_list.dart';
 import './add_task_screen.dart';
+import '../models/task.dart';
 
-class TasksScreen extends StatelessWidget {
+class TasksScreen extends StatefulWidget {
+  @override
+  _TasksScreenState createState() => _TasksScreenState();
+}
+
+class _TasksScreenState extends State<TasksScreen> {
+  List<Task> tasks = [
+    Task(name: 'Buy Milk'),
+    Task(name: 'Buy eggs'),
+    Task(name: 'Buy bread'),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +32,12 @@ class TasksScreen extends StatelessWidget {
                 child: Container(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: AddTaskScreen(),
+              child: AddTaskScreen((newTaskTitle) {
+                setState(() {
+                  tasks.add(Task(name: newTaskTitle));
+                });
+                Navigator.pop(context);
+              }),
             )),
           );
         },
@@ -60,7 +76,7 @@ class TasksScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '12 Tasks',
+                  '${tasks.length.toString()} Tasks',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -79,7 +95,7 @@ class TasksScreen extends StatelessWidget {
                   topRight: Radius.circular(20.0),
                 ),
               ),
-              child: TasksList(),
+              child: TasksList(tasks),
             ),
           ),
         ],
